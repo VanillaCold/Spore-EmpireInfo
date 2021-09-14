@@ -1,6 +1,6 @@
-layouts_atlas~	0x40464200
-EmpireInfoSPUI
-graphics_atlas~	0x31a44893
-sporemaster
 names
+layouts_atlas~	0x40464200
+graphics_atlas~	0x31a44893
+EmpireInfoSPUI
+sporemaster
 EmpireInfoTooltipGraphic
