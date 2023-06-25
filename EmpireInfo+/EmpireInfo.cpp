@@ -26,6 +26,8 @@ void EmpireInfo::Update()
 {
 	if (!Simulator::IsSpaceGame()) 
 	{
+		systemsColonized = 0;
+		totalSystemsColonized = 0;
 		if (win != nullptr && WindowManager.GetMainWindow()->FindWindowByID(id("EmpireInfo")))
 		{
 			WindowManager.GetMainWindow()->RemoveWindow(WindowManager.GetMainWindow()->FindWindowByID(id("EmpireInfo")));
@@ -41,8 +43,8 @@ void EmpireInfo::Update()
 		
 		win->FindWindowByID(0x03754E6C)->SetControlID(id("EmpireInfo"));
 	}
-	
-	if (WindowManager.GetMainWindow()->FindWindowByID(id("EmpireInfo")) && WindowManager.GetMainWindow()->FindWindowByID(0x034C963F))
+	auto anchorWindow = WindowManager.GetMainWindow()->FindWindowByID(0x034C963F);
+	if (WindowManager.GetMainWindow()->FindWindowByID(id("EmpireInfo")) && anchorWindow != nullptr)
 	{
 		UTFWin::IWindow* empInfoWindow = WindowManager.GetMainWindow()->FindWindowByID(id("EmpireInfo"));
 		string16 colonyString;
@@ -62,19 +64,27 @@ void EmpireInfo::Update()
 
 		//App::ConsolePrintF(to_string(systemsColonized).c_str());
 		//App::ConsolePrintF(to_string(totalSystemsColonized).c_str());
-		auto anchorWindow = WindowManager.GetMainWindow()->FindWindowByID(0x034C963F);
 		//auto anchorArea = anchorWindow->GetRealArea();
 		win->SetParentWindow(anchorWindow);
+
 		totalSystemsColonized = Simulator::SpacePlayerData::Get()->mPlayerColonies.size();
+		string16 allSystemsString;
+		allSystemsString.assign_convert(to_string(Simulator::GetPlayerEmpire()->mStars.size()));
+		allSystemsString = u"\nTotal systems: " + allSystemsString;
+
+		colonyString += allSystemsString;
+
 		string16 newColonyString;
+
 		newColonyString.assign_convert(to_string(systemsColonized));
 		newColonyString = u"\nNew colonies: " + newColonyString;
+
 		colonyString += newColonyString;
+
 		empInfoWindow->SetCaption(colonyString.c_str());
-		empInfoWindow->SetArea(Math::Rectangle(25, -25, 220, 25));
+		empInfoWindow->SetArea(Math::Rectangle(25, -32, 220, 26));
 		anchorWindow->SetFlag(UTFWin::WindowFlags::kWinFlagClip, false);
 		//SporeDebugPrint("%i", 10 + 5 * colonyString.length());
-
 	}
 }
 
